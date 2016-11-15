@@ -8,3 +8,6 @@ D:\JimN\Coding\VisualStudio\Projects\UnRar-Release\UnRar-Release\obj\Debug\UnRar
 D:\JimN\Coding\VisualStudio\Projects\UnRar-Release\UnRar-Release\obj\Debug\UnRar-Release.exe
 D:\JimN\Coding\VisualStudio\Projects\UnRar-Release\UnRar-Release\obj\Debug\UnRar-Release.pdb
 D:\JimN\Coding\VisualStudio\Projects\UnRar-Release\UnRar-Release\bin\Debug\SharpCompress.dll
+C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\bin\Debug\UnRar-Release.exe.config
+C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRar-Release.exe
+C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRar-Release.pdb
