@@ -1,3 +1,3 @@
 # UnRAR-Release
 
-# Unpacking stuff
+# Unpacking stuff and learning to use SharpCompress
