@@ -1,0 +1,10 @@
+D:\JimN\Coding\VisualStudio\Projects\UnRar-Release\UnRar-Release\bin\Debug\UnRar-Release.exe.config
+D:\JimN\Coding\VisualStudio\Projects\UnRar-Release\UnRar-Release\bin\Debug\UnRar-Release.exe
+D:\JimN\Coding\VisualStudio\Projects\UnRar-Release\UnRar-Release\bin\Debug\UnRar-Release.pdb
+D:\JimN\Coding\VisualStudio\Projects\UnRar-Release\UnRar-Release\obj\Debug\UnRar-Release.csprojResolveAssemblyReference.cache
+D:\JimN\Coding\VisualStudio\Projects\UnRar-Release\UnRar-Release\obj\Debug\UnRar_Release.Form1.resources
+D:\JimN\Coding\VisualStudio\Projects\UnRar-Release\UnRar-Release\obj\Debug\UnRar_Release.Properties.Resources.resources
+D:\JimN\Coding\VisualStudio\Projects\UnRar-Release\UnRar-Release\obj\Debug\UnRar-Release.csproj.GenerateResource.Cache
+D:\JimN\Coding\VisualStudio\Projects\UnRar-Release\UnRar-Release\obj\Debug\UnRar-Release.exe
+D:\JimN\Coding\VisualStudio\Projects\UnRar-Release\UnRar-Release\obj\Debug\UnRar-Release.pdb
+D:\JimN\Coding\VisualStudio\Projects\UnRar-Release\UnRar-Release\bin\Debug\SharpCompress.dll
