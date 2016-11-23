@@ -12,7 +12,7 @@ namespace UnRar_Release
     {
         RarArchive archive;
         string[] rar, rarSubs, nfo;
-        string releaseName, subsFolder;
+        string releaseName, showName, subsFolder;
         Thread backgroundThread;
 
         public Form1()
@@ -127,7 +127,7 @@ namespace UnRar_Release
                     Match match = Regex.Match(releaseName, "S..E..");
                     if (match.Success)
                     {
-                        string showName = releaseName.Substring(0, (match.Index - 1));
+                        showName = releaseName.Substring(0, (match.Index - 1));
                         showName = showName.Replace(".", " ");
                         tbOutput.Text = @"D:\TV\" + showName;
                     }
@@ -186,6 +186,7 @@ namespace UnRar_Release
                 {
                     if (tbOutput.Text.Contains(@"D:\TV"))
                     {
+                        Directory.CreateDirectory(tbOutput.Text);
                         backgroundThread = new Thread(() => extractArchive(tbOutput.Text));
                         backgroundThread.Start();
                     }
