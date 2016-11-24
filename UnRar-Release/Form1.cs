@@ -6,21 +6,21 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace UnRar_Release
+namespace UnRAR_Release
 {
     public partial class Form1 : Form
     {
         RarArchive archive;
         string[] rar, rarSubs, nfo;
-        string releaseName, showName, subsFolder;
+        string releaseName, showName, subsFolder, version, date;
         Thread backgroundThread;
 
         public Form1()
         {
             InitializeComponent();
             tbOutput.Text = @"X:\HD";
-            var version = Application.ProductVersion;
-            var date = DateTime.Now;
+            version = Application.ProductVersion;
+            date = DateTime.Now.ToString();
             this.Text = String.Format("UnRAR-Release v{0} - {1}", version, date);
         }
 
@@ -69,6 +69,12 @@ namespace UnRar_Release
                 }
                 Invoke(new UpdateUI(() => setStatus("Idle.", false)));
             }
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutBox1 aboutBox = new AboutBox1();
+            aboutBox.Show();
         }
 
         /*

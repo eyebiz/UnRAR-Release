@@ -8,3 +8,4 @@ C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRar_Release.Pr
 C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRAR-Release.csproj.GenerateResource.Cache
 C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRar-Release.exe
 C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRar-Release.pdb
+C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRar_Release.AboutBox1.resources

@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-namespace UnRar_Release
+namespace UnRAR_Release
 {
     static class Program
     {
