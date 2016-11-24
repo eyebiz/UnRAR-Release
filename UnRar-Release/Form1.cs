@@ -19,9 +19,9 @@ namespace UnRAR_Release
         {
             InitializeComponent();
             tbOutput.Text = @"X:\HD";
-            version = Application.ProductVersion;
-            date = DateTime.Now.ToString();
-            this.Text = String.Format("UnRAR-Release v{0} - {1}", version, date);
+            //version = Application.ProductVersion;
+            //date = DateTime.Now.ToString();
+            //this.Text = String.Format("UnRAR-Release v{0} - {1}", version, date);
         }
 
         public void setStatus(string status,bool disableUI)
