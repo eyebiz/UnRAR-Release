@@ -12,7 +12,7 @@ namespace UnRAR_Release
     {
         RarArchive archive;
         string[] rar, rarSubs, nfo;
-        string releaseName, showName, subsFolder, version, date;
+        string releaseName, showName, subsFolder;
         Thread backgroundThread;
 
         public Form1()
