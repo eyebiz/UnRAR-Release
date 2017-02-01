@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -9,12 +10,15 @@ namespace UnRAR_Release
         public AboutBox1()
         {
             InitializeComponent();
+
             this.Text = String.Format("About {0}", AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
             this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelDate.Text = Assembly.GetExecutingAssembly().GetLinkerTime().ToString();
-            this.textBoxDescription.Text = AssemblyDescription;
+            // this.textBoxDescription.Text = AssemblyDescription;
+            FileVersionInfo sharpCompressDLL = FileVersionInfo.GetVersionInfo(Application.StartupPath + @"\SharpCompress.dll");
+            this.textBoxDescription.Text = sharpCompressDLL.InternalName + " v" + sharpCompressDLL.FileVersion;
         }
 
         #region Assembly Attribute Accessors
