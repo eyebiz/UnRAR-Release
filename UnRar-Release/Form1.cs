@@ -140,18 +140,19 @@ namespace UnRAR_Release
                         showName = showName.Replace(".", " ");
                         tbOutput.Text = @"D:\TV\" + showName;
                     }
-                    else {
+                    else
+                    {
                         tbOutput.Text = @"X:\HD";
                     }
+                    archive = RarArchive.Open(rar[0]);
+                    tbCompSize.Text = archive.TotalSize.ToString() + " Bytes = " + Program.FormatBytes(archive.TotalSize);
+                    tbUncompSize.Text = archive.TotalUncompressSize.ToString() + " Bytes = " + Program.FormatBytes(archive.TotalUncompressSize);
+                    tbRatio.Text = ((int)(0.5f + ((100f * archive.TotalSize) / archive.TotalUncompressSize))).ToString() + " %";
+                    tbVolumes.Text = archive.Volumes.Count.ToString();
+                    tbFiles.Text = archive.Entries.Count.ToString();
+                    tbSolid.Text = archive.IsSolid.ToString();
+                    tbSubs.Text = Directory.Exists(subsFolder).ToString();
                 }
-                archive = RarArchive.Open(rar[0]);
-                tbCompSize.Text = archive.TotalSize.ToString() + " Bytes = " + Program.FormatBytes(archive.TotalSize);
-                tbUncompSize.Text = archive.TotalUncompressSize.ToString() + " Bytes = " + Program.FormatBytes(archive.TotalUncompressSize);
-                tbRatio.Text = ((int)(0.5f + ((100f * archive.TotalSize) / archive.TotalUncompressSize))).ToString() + " %";
-                tbVolumes.Text = archive.Volumes.Count.ToString();
-                tbFiles.Text = archive.Entries.Count.ToString();
-                tbSolid.Text = archive.IsSolid.ToString();
-                tbSubs.Text = Directory.Exists(subsFolder).ToString();
             }
             catch (Exception ex)
             {
