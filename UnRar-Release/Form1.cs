@@ -1,5 +1,6 @@
 ﻿using SharpCompress.Archives;
 using SharpCompress.Archives.Rar;
+using SharpCompress.Readers;
 using System;
 using System.Configuration;
 using System.IO;
@@ -62,7 +63,7 @@ namespace UnRAR_Release
                     if (!entry.IsDirectory)
                     {
                         //entry.WriteToDirectory(@outputDir, ExtractionOptions.ExtractFullPath | ExtractionOptions.Overwrite);
-                        entry.WriteToDirectory(@outputDir);
+                        entry.WriteToDirectory(@outputDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
                     }
                 }
                 Invoke(new UpdateUI(() => setStatus("Idle.", false)));
