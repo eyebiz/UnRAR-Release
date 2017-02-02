@@ -1,6 +1,7 @@
 ﻿using SharpCompress.Archives;
 using SharpCompress.Archives.Rar;
 using System;
+using System.Configuration;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -18,10 +19,7 @@ namespace UnRAR_Release
         public Form1()
         {
             InitializeComponent();
-            tbOutput.Text = @"X:\HD";
-            //version = Application.ProductVersion;
-            //date = DateTime.Now.ToString();
-            //this.Text = String.Format("UnRAR-Release v{0} - {1}", version, date);
+            tbOutput.Text = ConfigurationManager.AppSettings.Get("OutputDir");
         }
 
         public void setStatus(string status,bool disableUI)
@@ -116,7 +114,7 @@ namespace UnRAR_Release
             try
             {
                 fbdRelease.Description = "Choose Release";
-                fbdRelease.SelectedPath = @"D:\Torrents";
+                fbdRelease.SelectedPath = ConfigurationManager.AppSettings.Get("ReleaseStartDir");
 
                 if (fbdRelease.ShowDialog() == DialogResult.OK)
                 {
@@ -138,11 +136,11 @@ namespace UnRAR_Release
                     {
                         showName = releaseName.Substring(0, (match.Index - 1));
                         showName = showName.Replace(".", " ");
-                        tbOutput.Text = @"D:\TV\" + showName;
+                        tbOutput.Text = ConfigurationManager.AppSettings.Get("TVDir") + @"\" + showName;
                     }
                     else
                     {
-                        tbOutput.Text = @"X:\HD";
+                        tbOutput.Text = ConfigurationManager.AppSettings.Get("OutputDir");
                     }
                     archive = RarArchive.Open(rar[0]);
                     tbCompSize.Text = archive.TotalSize.ToString() + " Bytes = " + Program.FormatBytes(archive.TotalSize);
@@ -173,7 +171,7 @@ namespace UnRAR_Release
             try
             {
                 fbdOutput.Description = "Output Directory";
-                fbdOutput.SelectedPath = @"D:\TV";
+                fbdOutput.SelectedPath = ConfigurationManager.AppSettings.Get("TVDir");
 
                 if (fbdOutput.ShowDialog() == DialogResult.OK)
                 {
@@ -194,7 +192,7 @@ namespace UnRAR_Release
             {
                 try
                 {
-                    if (tbOutput.Text.Contains(@"D:\TV"))
+                    if (tbOutput.Text.Contains(ConfigurationManager.AppSettings.Get("TVDir")))
                     {
                         Directory.CreateDirectory(tbOutput.Text);
                         backgroundThread = new Thread(() => extractArchive(tbOutput.Text));
