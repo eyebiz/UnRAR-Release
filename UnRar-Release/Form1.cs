@@ -28,7 +28,7 @@ namespace UnRAR_Release
             }
             else
             {
-                MessageBox.Show((Application.ExecutablePath + ".config") + " is missing. Using hardcoded paths.");
+                MessageBox.Show((Application.ExecutablePath + ".config") + " is missing." + Environment.NewLine + "Using hardcoded paths.");
                 outputDir = @"X:\HD";
                 releaseStartDir = @"D:\Torrents";
                 tvDir = @"D:\TV";
