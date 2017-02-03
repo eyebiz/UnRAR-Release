@@ -7,16 +7,16 @@ namespace UnRAR_Release
 {
     public partial class ConfigForm : Form
     {
-        //string outputDir, tvDir, releaseStartDir;
         Configuration config;
 
         public ConfigForm()
         {
             InitializeComponent();
 
-            ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
-            configFileMap.ExeConfigFilename = (Application.ExecutablePath.Replace(".EXE",".exe") + ".config");
-            config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
+            //ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
+            //configFileMap.ExeConfigFilename = (Application.ExecutablePath.Replace(".EXE",".exe") + ".config");
+            //config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
+            config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             tbRelease.Text = config.AppSettings.Settings["ReleaseStartDir"].Value;
             tbOutput.Text = config.AppSettings.Settings["OutputDir"].Value;
             tbTV.Text = config.AppSettings.Settings["TVDir"].Value;
@@ -86,6 +86,7 @@ namespace UnRAR_Release
         {
             if (Directory.Exists(tbRelease.Text) && Directory.Exists(tbOutput.Text) && Directory.Exists(tbTV.Text))
             {
+                //Console.WriteLine(config.FilePath);
                 config.AppSettings.Settings["ReleaseStartDir"].Value = tbRelease.Text;
                 config.AppSettings.Settings["OutputDir"].Value = tbOutput.Text;
                 config.AppSettings.Settings["TVDir"].Value = tbTV.Text;
@@ -96,8 +97,6 @@ namespace UnRAR_Release
             {
                 MessageBox.Show("One or more directories are invalid.");
             }
-            //ConfigurationManager.AppSettings.Set("OutputDir",tbOutput.Text);
-            //ConfigurationManager.AppSettings.Set("TVDir",tbTV.Text);
         }
 
         private void btnDiscard_Click(object sender, EventArgs e)

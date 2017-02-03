@@ -16,13 +16,13 @@ namespace UnRAR_Release
         string[] rar, rarSubs, nfo;
         string releaseName, showName, subsFolder, releaseStartDir, outputDir, tvDir;
         Thread backgroundThread;
-        ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
+        //ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
         Configuration config;
 
         public Form1()
         {
             InitializeComponent();
-            configFileMap.ExeConfigFilename = (Application.ExecutablePath.Replace(".EXE", ".exe") + ".config");
+            //configFileMap.ExeConfigFilename = (Application.ExecutablePath.Replace(".EXE", ".exe") + ".config");
             if (!File.Exists(Application.ExecutablePath + ".config"))
             {
                 MessageBox.Show((Application.ExecutablePath + ".config") + " is missing." + Environment.NewLine + "Using hardcoded paths.");
@@ -42,11 +42,13 @@ namespace UnRAR_Release
         {
             if (File.Exists(Application.ExecutablePath + ".config"))
             {
-
-                config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
+                config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                //Console.WriteLine(config.FilePath);
                 releaseStartDir = config.AppSettings.Settings["ReleaseStartDir"].Value;
                 outputDir = config.AppSettings.Settings["OutputDir"].Value;
                 tvDir = config.AppSettings.Settings["TVDir"].Value;
+                tbOutput.Text = outputDir;
+                tbRelease.Text = releaseStartDir;
 
                 //ConfigurationManager.RefreshSection("appSettings");
                 //releaseStartDir = ConfigurationManager.AppSettings.Get("ReleaseStartDir");
