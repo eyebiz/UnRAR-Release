@@ -14,13 +14,29 @@ namespace UnRAR_Release
     {
         RarArchive archive;
         string[] rar, rarSubs, nfo;
-        string releaseName, showName, subsFolder;
+        string releaseName, showName, subsFolder, outputDir, tvDir, releaseStartDir;
         Thread backgroundThread;
 
         public Form1()
         {
             InitializeComponent();
-            tbOutput.Text = ConfigurationManager.AppSettings.Get("OutputDir");
+            if (File.Exists(Application.ExecutablePath + ".config"))
+            {
+                outputDir = ConfigurationManager.AppSettings.Get("OutputDir");
+                releaseStartDir = ConfigurationManager.AppSettings.Get("ReleaseStartDir");
+                tvDir = ConfigurationManager.AppSettings.Get("TVDir");
+            }
+            else
+            {
+                MessageBox.Show((Application.ExecutablePath + ".config") + " is missing. Using hardcoded paths.");
+                outputDir = @"X:\HD";
+                releaseStartDir = @"D:\Torrents";
+                tvDir = @"D:\TV";
+            }
+            tbOutput.Text = outputDir;
+
+            //Console.WriteLine(String.IsNullOrEmpty(ConfigurationManager.AppSettings["OutputDirr"]));
+            //Console.WriteLine(File.Exists(Application.ExecutablePath+".config"));
         }
 
         public void setStatus(string status,bool disableUI)
@@ -50,7 +66,7 @@ namespace UnRAR_Release
 
         public delegate void UpdateUI();
 
-        public void extractArchive(string outputDir)
+        public void extractArchive(string outDir)
         // public void extractArchive(string outputDir, string file)
         // Before archive was public
         {
@@ -63,7 +79,7 @@ namespace UnRAR_Release
                     if (!entry.IsDirectory)
                     {
                         //entry.WriteToDirectory(@outputDir, ExtractionOptions.ExtractFullPath | ExtractionOptions.Overwrite);
-                        entry.WriteToDirectory(@outputDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                        entry.WriteToDirectory(outDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
                     }
                 }
                 Invoke(new UpdateUI(() => setStatus("Idle.", false)));
@@ -115,7 +131,7 @@ namespace UnRAR_Release
             try
             {
                 fbdRelease.Description = "Choose Release";
-                fbdRelease.SelectedPath = ConfigurationManager.AppSettings.Get("ReleaseStartDir");
+                fbdRelease.SelectedPath = releaseStartDir;
 
                 if (fbdRelease.ShowDialog() == DialogResult.OK)
                 {
@@ -137,11 +153,11 @@ namespace UnRAR_Release
                     {
                         showName = releaseName.Substring(0, (match.Index - 1));
                         showName = showName.Replace(".", " ");
-                        tbOutput.Text = ConfigurationManager.AppSettings.Get("TVDir") + @"\" + showName;
+                        tbOutput.Text = tvDir + @"\" + showName;
                     }
                     else
                     {
-                        tbOutput.Text = ConfigurationManager.AppSettings.Get("OutputDir");
+                        tbOutput.Text = outputDir;
                     }
                     archive = RarArchive.Open(rar[0]);
                     tbCompSize.Text = archive.TotalSize.ToString() + " Bytes = " + Program.FormatBytes(archive.TotalSize);
@@ -172,7 +188,7 @@ namespace UnRAR_Release
             try
             {
                 fbdOutput.Description = "Output Directory";
-                fbdOutput.SelectedPath = ConfigurationManager.AppSettings.Get("TVDir");
+                fbdOutput.SelectedPath = tvDir;
 
                 if (fbdOutput.ShowDialog() == DialogResult.OK)
                 {
@@ -193,7 +209,7 @@ namespace UnRAR_Release
             {
                 try
                 {
-                    if (tbOutput.Text.Contains(ConfigurationManager.AppSettings.Get("TVDir")))
+                    if (tbOutput.Text.Contains(tvDir))
                     {
                         Directory.CreateDirectory(tbOutput.Text);
                         backgroundThread = new Thread(() => extractArchive(tbOutput.Text));
