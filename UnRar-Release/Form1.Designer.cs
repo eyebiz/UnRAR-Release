@@ -56,21 +56,22 @@
             this.tbRatio = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbRelease
             // 
-            this.tbRelease.Location = new System.Drawing.Point(88, 43);
+            this.tbRelease.Location = new System.Drawing.Point(115, 45);
             this.tbRelease.Name = "tbRelease";
             this.tbRelease.ReadOnly = true;
-            this.tbRelease.Size = new System.Drawing.Size(409, 20);
+            this.tbRelease.Size = new System.Drawing.Size(382, 20);
             this.tbRelease.TabIndex = 1;
             // 
             // btnReleaseBrowse
             // 
-            this.btnReleaseBrowse.Location = new System.Drawing.Point(503, 41);
+            this.btnReleaseBrowse.Location = new System.Drawing.Point(503, 43);
             this.btnReleaseBrowse.Name = "btnReleaseBrowse";
             this.btnReleaseBrowse.Size = new System.Drawing.Size(75, 23);
             this.btnReleaseBrowse.TabIndex = 2;
@@ -81,7 +82,7 @@
             // lbRelease
             // 
             this.lbRelease.AutoSize = true;
-            this.lbRelease.Location = new System.Drawing.Point(33, 46);
+            this.lbRelease.Location = new System.Drawing.Point(60, 48);
             this.lbRelease.Name = "lbRelease";
             this.lbRelease.Size = new System.Drawing.Size(49, 13);
             this.lbRelease.TabIndex = 3;
@@ -90,7 +91,7 @@
             // lbOutput
             // 
             this.lbOutput.AutoSize = true;
-            this.lbOutput.Location = new System.Drawing.Point(33, 74);
+            this.lbOutput.Location = new System.Drawing.Point(22, 74);
             this.lbOutput.Name = "lbOutput";
             this.lbOutput.Size = new System.Drawing.Size(87, 13);
             this.lbOutput.TabIndex = 4;
@@ -98,10 +99,10 @@
             // 
             // tbOutput
             // 
-            this.tbOutput.Location = new System.Drawing.Point(126, 71);
+            this.tbOutput.Location = new System.Drawing.Point(115, 71);
             this.tbOutput.Name = "tbOutput";
             this.tbOutput.ReadOnly = true;
-            this.tbOutput.Size = new System.Drawing.Size(371, 20);
+            this.tbOutput.Size = new System.Drawing.Size(382, 20);
             this.tbOutput.TabIndex = 5;
             // 
             // btnExtract
@@ -278,7 +279,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutToolStripMenuItem});
+            this.aboutToolStripMenuItem,
+            this.configToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(604, 24);
@@ -292,6 +294,13 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
+            // configToolStripMenuItem
+            // 
+            this.configToolStripMenuItem.Name = "configToolStripMenuItem";
+            this.configToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
+            this.configToolStripMenuItem.Text = "Config";
+            this.configToolStripMenuItem.Click += new System.EventHandler(this.configToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -366,6 +375,7 @@
         private System.Windows.Forms.TextBox tbRatio;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem configToolStripMenuItem;
     }
 }
 

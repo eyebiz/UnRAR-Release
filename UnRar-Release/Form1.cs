@@ -14,29 +14,45 @@ namespace UnRAR_Release
     {
         RarArchive archive;
         string[] rar, rarSubs, nfo;
-        string releaseName, showName, subsFolder, outputDir, tvDir, releaseStartDir;
+        string releaseName, showName, subsFolder, releaseStartDir, outputDir, tvDir;
         Thread backgroundThread;
+        ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
+        Configuration config;
 
         public Form1()
         {
             InitializeComponent();
-            if (File.Exists(Application.ExecutablePath + ".config"))
-            {
-                outputDir = ConfigurationManager.AppSettings.Get("OutputDir");
-                releaseStartDir = ConfigurationManager.AppSettings.Get("ReleaseStartDir");
-                tvDir = ConfigurationManager.AppSettings.Get("TVDir");
-            }
-            else
+            configFileMap.ExeConfigFilename = (Application.ExecutablePath.Replace(".EXE", ".exe") + ".config");
+            if (!File.Exists(Application.ExecutablePath + ".config"))
             {
                 MessageBox.Show((Application.ExecutablePath + ".config") + " is missing." + Environment.NewLine + "Using hardcoded paths.");
-                outputDir = @"X:\HD";
                 releaseStartDir = @"D:\Torrents";
+                outputDir = @"X:\HD";
                 tvDir = @"D:\TV";
             }
             tbOutput.Text = outputDir;
+            tbRelease.Text = releaseStartDir;
+            this.Activated += new EventHandler(Form1_Activated);
 
             //Console.WriteLine(String.IsNullOrEmpty(ConfigurationManager.AppSettings["OutputDirr"]));
             //Console.WriteLine(File.Exists(Application.ExecutablePath+".config"));
+        }
+
+        void Form1_Activated(object sender, EventArgs e)
+        {
+            if (File.Exists(Application.ExecutablePath + ".config"))
+            {
+
+                config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
+                releaseStartDir = config.AppSettings.Settings["ReleaseStartDir"].Value;
+                outputDir = config.AppSettings.Settings["OutputDir"].Value;
+                tvDir = config.AppSettings.Settings["TVDir"].Value;
+
+                //ConfigurationManager.RefreshSection("appSettings");
+                //releaseStartDir = ConfigurationManager.AppSettings.Get("ReleaseStartDir");
+                //outputDir = ConfigurationManager.AppSettings.Get("OutputDir");
+                //tvDir = ConfigurationManager.AppSettings.Get("TVDir");
+            }
         }
 
         public void setStatus(string status,bool disableUI)
@@ -64,6 +80,18 @@ namespace UnRAR_Release
             Application.DoEvents();
         }
 
+        private void configToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConfigForm cForm = new ConfigForm();
+            cForm.ShowDialog();
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutBox1 aboutBox = new AboutBox1();
+            aboutBox.ShowDialog();
+        }
+
         public delegate void UpdateUI();
 
         public void extractArchive(string outDir)
@@ -84,12 +112,6 @@ namespace UnRAR_Release
                 }
                 Invoke(new UpdateUI(() => setStatus("Idle.", false)));
             }
-        }
-
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AboutBox1 aboutBox = new AboutBox1();
-            aboutBox.Show();
         }
 
         /*
@@ -127,10 +149,11 @@ namespace UnRAR_Release
         private void btnReleaseBrowse_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbdRelease = new FolderBrowserDialog();
+            //Console.WriteLine(releaseStartDir);
             tsProgress.Value = 0;
             try
             {
-                fbdRelease.Description = "Choose Release";
+                fbdRelease.Description = "Select Release Directory";
                 fbdRelease.SelectedPath = releaseStartDir;
 
                 if (fbdRelease.ShowDialog() == DialogResult.OK)
@@ -140,33 +163,36 @@ namespace UnRAR_Release
                     rar = Directory.GetFiles(fbdRelease.SelectedPath, "*.rar");
                     nfo = Directory.GetFiles(fbdRelease.SelectedPath, "*.nfo");
 
-                    subsFolder = fbdRelease.SelectedPath + @"\" + "Subs";
-                    if (Directory.Exists(subsFolder))
+                    if (rar.Length != 0)
                     {
-                        rarSubs = Directory.GetFiles(subsFolder, "*.rar");
-                    }
+                        subsFolder = fbdRelease.SelectedPath + @"\" + "Subs";
+                        if (Directory.Exists(subsFolder))
+                        {
+                            rarSubs = Directory.GetFiles(subsFolder, "*.rar");
+                        }
 
-                    releaseName = Path.GetFileName(Path.GetDirectoryName(rar[0]));
+                        releaseName = Path.GetFileName(Path.GetDirectoryName(rar[0]));
 
-                    Match match = Regex.Match(releaseName, "S..E..");
-                    if (match.Success)
-                    {
-                        showName = releaseName.Substring(0, (match.Index - 1));
-                        showName = showName.Replace(".", " ");
-                        tbOutput.Text = tvDir + @"\" + showName;
+                        Match match = Regex.Match(releaseName, "S..E..");
+                        if (match.Success)
+                        {
+                            showName = releaseName.Substring(0, (match.Index - 1));
+                            showName = showName.Replace(".", " ");
+                            tbOutput.Text = tvDir + @"\" + showName;
+                        }
+                        else
+                        {
+                            tbOutput.Text = outputDir;
+                        }
+                        archive = RarArchive.Open(rar[0]);
+                        tbCompSize.Text = archive.TotalSize.ToString() + " Bytes = " + Program.FormatBytes(archive.TotalSize);
+                        tbUncompSize.Text = archive.TotalUncompressSize.ToString() + " Bytes = " + Program.FormatBytes(archive.TotalUncompressSize);
+                        tbRatio.Text = ((int)(0.5f + ((100f * archive.TotalSize) / archive.TotalUncompressSize))).ToString() + " %";
+                        tbVolumes.Text = archive.Volumes.Count.ToString();
+                        tbFiles.Text = archive.Entries.Count.ToString();
+                        tbSolid.Text = archive.IsSolid.ToString();
+                        tbSubs.Text = Directory.Exists(subsFolder).ToString();
                     }
-                    else
-                    {
-                        tbOutput.Text = outputDir;
-                    }
-                    archive = RarArchive.Open(rar[0]);
-                    tbCompSize.Text = archive.TotalSize.ToString() + " Bytes = " + Program.FormatBytes(archive.TotalSize);
-                    tbUncompSize.Text = archive.TotalUncompressSize.ToString() + " Bytes = " + Program.FormatBytes(archive.TotalUncompressSize);
-                    tbRatio.Text = ((int)(0.5f + ((100f * archive.TotalSize) / archive.TotalUncompressSize))).ToString() + " %";
-                    tbVolumes.Text = archive.Volumes.Count.ToString();
-                    tbFiles.Text = archive.Entries.Count.ToString();
-                    tbSolid.Text = archive.IsSolid.ToString();
-                    tbSubs.Text = Directory.Exists(subsFolder).ToString();
                 }
             }
             catch (Exception ex)
@@ -179,7 +205,7 @@ namespace UnRAR_Release
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            Close();
+            this.Close();
         }
 
         private void btnOutputBrowse_Click(object sender, EventArgs e)
@@ -187,7 +213,7 @@ namespace UnRAR_Release
             FolderBrowserDialog fbdOutput = new FolderBrowserDialog();
             try
             {
-                fbdOutput.Description = "Output Directory";
+                fbdOutput.Description = "Select Output Directory";
                 fbdOutput.SelectedPath = tvDir;
 
                 if (fbdOutput.ShowDialog() == DialogResult.OK)
@@ -205,7 +231,7 @@ namespace UnRAR_Release
 
         private void btnExtract_Click(object sender, EventArgs e)
         {
-            if (!String.IsNullOrEmpty(tbRelease.Text))
+            if (!String.IsNullOrEmpty(tbRelease.Text) && rar.Length != 0)
             {
                 try
                 {

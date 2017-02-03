@@ -9,3 +9,4 @@ C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRAR-Release.cs
 C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRar-Release.exe
 C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRar-Release.pdb
 C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRar_Release.AboutBox1.resources
+C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRAR_Release.ConfigForm.resources
