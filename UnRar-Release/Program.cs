@@ -109,5 +109,22 @@ namespace UnRAR_Release
 
             return localTime;
         }
+
+        public static void CreateAppConfig()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
+            sb.AppendLine("<configuration>");
+            sb.AppendLine("  <startup>");
+            sb.AppendLine("    <supportedRuntime version=\"v4.0\" sku=\".NETFramework,Version=v4.5.2\" />");
+            sb.AppendLine("  </startup>");
+            sb.AppendLine("  <appSettings>");
+            sb.AppendLine("    <add key=\"ReleaseStartDir\" value=\"D:\\Torrents\" />");
+            sb.AppendLine("    <add key=\"OutputDir\" value=\"X:\\HD\" />");
+            sb.AppendLine("    <add key=\"TVDir\" value=\"D:\\TV\" />");
+            sb.AppendLine("  </appSettings>");
+            sb.AppendLine("</configuration>");
+            File.WriteAllText(String.Concat(Application.ExecutablePath, ".config"), sb.ToString());
+        }
     }
 }

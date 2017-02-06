@@ -23,24 +23,16 @@ namespace UnRAR_Release
         {
             InitializeComponent();
             //configFileMap.ExeConfigFilename = (Application.ExecutablePath.Replace(".EXE", ".exe") + ".config");
-            if (!File.Exists(Application.ExecutablePath + ".config"))
+            if (!File.Exists(String.Concat(Application.ExecutablePath, ".config")))
             {
-                MessageBox.Show((Application.ExecutablePath + ".config") + " is missing." + Environment.NewLine + "Using hardcoded paths.");
-                releaseStartDir = @"D:\Torrents";
-                outputDir = @"X:\HD";
-                tvDir = @"D:\TV";
+                Program.CreateAppConfig();
             }
-            tbOutput.Text = outputDir;
-            tbRelease.Text = releaseStartDir;
             this.Activated += new EventHandler(Form1_Activated);
-
-            //Console.WriteLine(String.IsNullOrEmpty(ConfigurationManager.AppSettings["OutputDirr"]));
-            //Console.WriteLine(File.Exists(Application.ExecutablePath+".config"));
         }
 
         void Form1_Activated(object sender, EventArgs e)
         {
-            if (File.Exists(Application.ExecutablePath + ".config"))
+            if (File.Exists(String.Concat(Application.ExecutablePath, ".config")))
             {
                 config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                 //Console.WriteLine(config.FilePath);
@@ -52,10 +44,6 @@ namespace UnRAR_Release
                     tbOutput.Text = outputDir;
                     tbRelease.Text = releaseStartDir;
                 }
-                //ConfigurationManager.RefreshSection("appSettings");
-                //releaseStartDir = ConfigurationManager.AppSettings.Get("ReleaseStartDir");
-                //outputDir = ConfigurationManager.AppSettings.Get("OutputDir");
-                //tvDir = ConfigurationManager.AppSettings.Get("TVDir");
             }
         }
 
