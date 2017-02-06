@@ -28,6 +28,7 @@ namespace UnRAR_Release
                 string[] lines = File.ReadAllLines(inputFileName, Encoding.GetEncoding(28591));
                 if (deleteInputFile)
                 {
+                    File.SetAttributes(inputFileName, FileAttributes.Normal);
                     File.Delete(inputFileName);
                 }
                 string fileOutput = outputDir + @"\" + Path.GetFileName(inputFileName);

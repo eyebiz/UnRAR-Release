@@ -47,7 +47,7 @@ namespace UnRAR_Release
             }
         }
 
-        public void setStatus(string status,bool disableUI)
+        public void setStatus(string status, bool disableUI)
         {
             tsStatus.Text = status;
             tsStatus.Invalidate();
@@ -227,7 +227,7 @@ namespace UnRAR_Release
             {
                 try
                 {
-                    // For TV expisodes
+                    // For TV episodes
                     if (tbOutput.Text.Contains(tvDir))
                     {
                         Directory.CreateDirectory(tbOutput.Text);
