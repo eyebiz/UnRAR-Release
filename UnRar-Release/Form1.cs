@@ -47,9 +47,11 @@ namespace UnRAR_Release
                 releaseStartDir = config.AppSettings.Settings["ReleaseStartDir"].Value;
                 outputDir = config.AppSettings.Settings["OutputDir"].Value;
                 tvDir = config.AppSettings.Settings["TVDir"].Value;
-                tbOutput.Text = outputDir;
-                tbRelease.Text = releaseStartDir;
-
+                if (String.IsNullOrEmpty(releaseName))
+                {
+                    tbOutput.Text = outputDir;
+                    tbRelease.Text = releaseStartDir;
+                }
                 //ConfigurationManager.RefreshSection("appSettings");
                 //releaseStartDir = ConfigurationManager.AppSettings.Get("ReleaseStartDir");
                 //outputDir = ConfigurationManager.AppSettings.Get("OutputDir");
@@ -237,6 +239,7 @@ namespace UnRAR_Release
             {
                 try
                 {
+                    // For TV expisodes
                     if (tbOutput.Text.Contains(tvDir))
                     {
                         Directory.CreateDirectory(tbOutput.Text);
@@ -245,6 +248,7 @@ namespace UnRAR_Release
                     }
                     else
                     {
+                        // For movies
                         string outputReleaseDir = tbOutput.Text + @"\" + releaseName;
                         Directory.CreateDirectory(outputReleaseDir);
 
