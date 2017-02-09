@@ -155,7 +155,7 @@ namespace UnRAR_Release
                     rar = Directory.GetFiles(fbdRelease.SelectedPath, "*.rar");
                     nfo = Directory.GetFiles(fbdRelease.SelectedPath, "*.nfo");
 
-                    if (rar.Length != 0)
+                    if (rar.Length > 0)
                     {
                         subsFolder = fbdRelease.SelectedPath + @"\" + "Subs";
                         if (Directory.Exists(subsFolder))
@@ -223,7 +223,7 @@ namespace UnRAR_Release
 
         private void btnExtract_Click(object sender, EventArgs e)
         {
-            if (!String.IsNullOrEmpty(tbRelease.Text) && rar.Length != 0)
+            if (!String.IsNullOrEmpty(tbRelease.Text) && rar.Length > 0)
             {
                 try
                 {
