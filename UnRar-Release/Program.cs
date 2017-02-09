@@ -48,7 +48,7 @@ namespace UnRAR_Release
                 Directory.CreateDirectory(releaseSubsDir);
                 extractArchiveUnthreaded(releaseSubsDir, rarSubs[0]);
                 rarSubs2 = Directory.GetFiles(releaseSubsDir, "*.rar");
-                if (rarSubs2 != null)
+                if (rarSubs2.Length > 0)
                 {
                     extractArchiveUnthreaded(releaseSubsDir, rarSubs2[0]);
                     File.Delete(rarSubs2[0]);

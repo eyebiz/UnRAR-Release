@@ -243,7 +243,7 @@ namespace UnRAR_Release
                         backgroundThread = new Thread(() => extractArchive(outputReleaseDir));
                         backgroundThread.Start();
 
-                        if (rarSubs != null)
+                        if (rarSubs.Length > 0)
                         {
                             Program.extractSubs(rarSubs, outputReleaseDir);
                         }
