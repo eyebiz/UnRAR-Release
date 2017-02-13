@@ -12,10 +12,6 @@ namespace UnRAR_Release
         public ConfigForm()
         {
             InitializeComponent();
-
-            //ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
-            //configFileMap.ExeConfigFilename = (Application.ExecutablePath.Replace(".EXE",".exe") + ".config");
-            //config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
             config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             tbRelease.Text = config.AppSettings.Settings["ReleaseStartDir"].Value;
             tbOutput.Text = config.AppSettings.Settings["OutputDir"].Value;

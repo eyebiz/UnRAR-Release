@@ -43,6 +43,7 @@ namespace UnRAR_Release
                 {
                     tbOutput.Text = outputDir;
                     tbRelease.Text = releaseStartDir;
+                    btnExtract.Enabled = false;
                 }
             }
         }
@@ -184,6 +185,7 @@ namespace UnRAR_Release
                         tbFiles.Text = archive.Entries.Count.ToString();
                         tbSolid.Text = archive.IsSolid.ToString();
                         tbSubs.Text = Directory.Exists(subsFolder).ToString();
+                        btnExtract.Enabled = true;
                     }
                 }
             }
