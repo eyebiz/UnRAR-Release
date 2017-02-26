@@ -171,6 +171,16 @@ namespace UnRAR_Release
                         {
                             showName = releaseName.Substring(0, (match.Index - 1));
                             showName = showName.Replace(".", " ");
+                            // Exceptions
+                            switch (showName)
+                            {
+                                case "Marvels Agents of S H I E L D":
+                                    showName = "Marvels Agents of SHIELD";
+                                    break;
+                                case "Taboo UK":
+                                    showName = "Taboo (2017)";
+                                    break;
+                            }
                             tbOutput.Text = tvDir + @"\" + showName;
                         }
                         else
