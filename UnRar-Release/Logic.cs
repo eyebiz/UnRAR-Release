@@ -82,7 +82,7 @@ namespace UnRAR_Release
             return ri;
         }
 
-        public void extractRelease(ReleaseInfo ri, string outputDir, Form1 sender)
+        public void extractRelease(ReleaseInfo ri, string outputDir, Form1 sender, bool terminateApplication)
         {
             if (!String.IsNullOrEmpty(ri.Name) && ri.NumberOfFilesInArchive > 0)
             {
@@ -92,7 +92,7 @@ namespace UnRAR_Release
                     if (ri.Type == "tv")
                     {
                         Directory.CreateDirectory(outputDir);
-                        Thread backgroundThread = new Thread(() => sender.extractArchive(ri.Archive, outputDir));
+                        Thread backgroundThread = new Thread(() => sender.extractArchive(ri.Archive, outputDir, terminateApplication));
                         backgroundThread.Start();
                     }
                     else
@@ -102,10 +102,8 @@ namespace UnRAR_Release
                         string outputReleaseDir = outputDir + @"\" + ri.Name;
                         Directory.CreateDirectory(outputReleaseDir);
                         processFile(nfo[0], outputReleaseDir, false);
-
-                        Thread backgroundThread = new Thread(() => sender.extractArchive(ri.Archive, outputReleaseDir));
+                        Thread backgroundThread = new Thread(() => sender.extractArchive(ri.Archive, outputReleaseDir, terminateApplication));
                         backgroundThread.Start();
-
                         if (ri.SubsPresent)
                         {
                             extractSubs(ri, outputReleaseDir);

@@ -4,8 +4,6 @@ using SharpCompress.Readers;
 using System;
 using System.Configuration;
 using System.IO;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace UnRAR_Release
@@ -15,9 +13,8 @@ namespace UnRAR_Release
         Logic l = new Logic();
         Logic.ReleaseInfo ri;
         string releaseStartDir, outputDir, tvDir;
-        //Thread backgroundThread;
-        //ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
         Configuration config;
+        string[] args = Environment.GetCommandLineArgs();
 
         public Form1()
         {
@@ -27,7 +24,29 @@ namespace UnRAR_Release
             {
                 l.CreateAppConfig();
             }
+            Shown += Form1_Shown;
             this.Activated += new EventHandler(Form1_Activated);
+        }
+
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            System.Threading.Thread.Sleep(1000);
+            if (args.Length > 1)
+            {
+                ri = l.processRelease(args[1]);
+                tbRelease.Text = args[1];
+                if (ri.Type == "tv")
+                {
+                    tbOutput.Text = tvDir + @"\" + ri.ShowName;
+                    l.extractRelease(ri, tbOutput.Text, this, true);
+                }
+                else
+                {
+                    tbOutput.Text = outputDir;
+                    l.extractRelease(ri, outputDir, this, true);
+                }
+            }
+
         }
 
         void Form1_Activated(object sender, EventArgs e)
@@ -87,7 +106,7 @@ namespace UnRAR_Release
 
         public delegate void UpdateUI();
 
-        public void extractArchive(RarArchive archive, string outputDir)
+        public void extractArchive(RarArchive archive, string outputDir, bool terminateApplication)
         {
             Invoke(new UpdateUI(() => setStatus("Extracting...", true)));
             using (archive)
@@ -99,7 +118,14 @@ namespace UnRAR_Release
                         entry.WriteToDirectory(outputDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
                     }
                 }
-                Invoke(new UpdateUI(() => setStatus("Idle.", false)));
+                if (terminateApplication)
+                {
+                    this.Close();
+                }
+                else
+                {
+                    Invoke(new UpdateUI(() => setStatus("Idle.", false)));
+                }
             }
         }
 
@@ -135,23 +161,26 @@ namespace UnRAR_Release
                 {
                     tbRelease.Text = fbdRelease.SelectedPath;
                     ri = l.processRelease(fbdRelease.SelectedPath);
-                    if (ri.Type == "tv")
+                    if (ri.Name != null)
                     {
-                        tbOutput.Text = tvDir + @"\" + ri.ShowName;
-                    }
-                    else
-                    {
-                        tbOutput.Text = outputDir;
-                    }
+                        if (ri.Type == "tv")
+                        {
+                            tbOutput.Text = tvDir + @"\" + ri.ShowName;
+                        }
+                        else
+                        {
+                            tbOutput.Text = outputDir;
+                        }
 
-                    tbCompSize.Text = ri.CompressedSize;
-                    tbUncompSize.Text = ri.UncompressedSize;
-                    tbRatio.Text = ri.CompressionRatio;
-                    tbVolumes.Text = ri.NumberOfArchiveParts.ToString();
-                    tbFiles.Text = ri.NumberOfFilesInArchive.ToString();
-                    tbSolid.Text = ri.SolidArchive.ToString();
-                    tbSubs.Text = ri.SubsPresent.ToString();
-                    btnExtract.Enabled = true;
+                        tbCompSize.Text = ri.CompressedSize;
+                        tbUncompSize.Text = ri.UncompressedSize;
+                        tbRatio.Text = ri.CompressionRatio;
+                        tbVolumes.Text = ri.NumberOfArchiveParts.ToString();
+                        tbFiles.Text = ri.NumberOfFilesInArchive.ToString();
+                        tbSolid.Text = ri.SolidArchive.ToString();
+                        tbSubs.Text = ri.SubsPresent.ToString();
+                        btnExtract.Enabled = true;
+                    }
                 }
             }
             catch (Exception ex)
@@ -189,7 +218,7 @@ namespace UnRAR_Release
 
         private void btnExtract_Click(object sender, EventArgs e)
         {
-            l.extractRelease(ri, tbOutput.Text, this);
+            l.extractRelease(ri, tbOutput.Text, this, false);
         }
     }
 }
