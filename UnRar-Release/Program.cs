@@ -1,10 +1,6 @@
-﻿using SharpCompress.Archives;
-using SharpCompress.Archives.Rar;
-using SharpCompress.Readers;
-using System;
+﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 
 namespace UnRAR_Release
@@ -17,75 +13,10 @@ namespace UnRAR_Release
         [STAThread]
         static void Main()
         {
+            string[] args = Environment.GetCommandLineArgs();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
-        }
-
-        public static void processFile(string inputFileName, string outputDir, bool deleteInputFile)
-        {
-            try {
-                string[] lines = File.ReadAllLines(inputFileName, Encoding.GetEncoding(28591));
-                if (deleteInputFile)
-                {
-                    File.SetAttributes(inputFileName, FileAttributes.Normal);
-                    File.Delete(inputFileName);
-                }
-                string fileOutput = outputDir + @"\" + Path.GetFileName(inputFileName);
-                File.WriteAllLines(fileOutput, lines, Encoding.GetEncoding(28591));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
-            }
-        }
-
-        public static void extractSubs(string[] rarSubs, string releaseDir)
-        {
-            try {
-                string[] rarSubs2;
-                string releaseSubsDir = releaseDir + @"\" + "Subs";
-                Directory.CreateDirectory(releaseSubsDir);
-                extractArchiveUnthreaded(releaseSubsDir, rarSubs[0]);
-                rarSubs2 = Directory.GetFiles(releaseSubsDir, "*.rar");
-                if (rarSubs2.Length > 0)
-                {
-                    extractArchiveUnthreaded(releaseSubsDir, rarSubs2[0]);
-                    File.Delete(rarSubs2[0]);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
-            }
-        }
-
-        public static void extractArchiveUnthreaded(string outputDir, string file)
-        {
-            using (var archive = RarArchive.Open(@file))
-            {
-                foreach (var entry in archive.Entries)
-                {
-                    if (!entry.IsDirectory)
-                    {
-                        //entry.WriteToDirectory(@outputDir, ExtractOptions.ExtractFullPath | ExtractOptions.Overwrite);
-                        entry.WriteToDirectory(@outputDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
-                    }
-                }
-            }
-        }
-
-        public static string FormatBytes(long bytes)
-        {
-            string[] Suffix = { "B", "KB", "MB", "GB", "TB" };
-            int i;
-            double dblSByte = bytes;
-            for (i = 0; i < Suffix.Length && bytes >= 1024; i++, bytes /= 1024)
-            {
-                dblSByte = bytes / 1024.0;
-            }
-
-            return String.Format("{0:0.##} {1}", dblSByte, Suffix[i]);
         }
 
         public static DateTime GetLinkerTime(this Assembly assembly, TimeZoneInfo target = null)
@@ -109,23 +40,6 @@ namespace UnRAR_Release
             var localTime = TimeZoneInfo.ConvertTimeFromUtc(linkTimeUtc, tz);
 
             return localTime;
-        }
-
-        public static void CreateAppConfig()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
-            sb.AppendLine("<configuration>");
-            sb.AppendLine("  <startup>");
-            sb.AppendLine("    <supportedRuntime version=\"v4.0\" sku=\".NETFramework,Version=v4.5.2\" />");
-            sb.AppendLine("  </startup>");
-            sb.AppendLine("  <appSettings>");
-            sb.AppendLine("    <add key=\"ReleaseStartDir\" value=\"D:\\Torrents\" />");
-            sb.AppendLine("    <add key=\"OutputDir\" value=\"X:\\HD\" />");
-            sb.AppendLine("    <add key=\"TVDir\" value=\"D:\\TV\" />");
-            sb.AppendLine("  </appSettings>");
-            sb.AppendLine("</configuration>");
-            File.WriteAllText(String.Concat(Application.ExecutablePath, ".config"), sb.ToString());
         }
     }
 }

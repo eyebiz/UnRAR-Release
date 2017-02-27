@@ -12,10 +12,10 @@ namespace UnRAR_Release
 {
     public partial class Form1 : Form
     {
-        RarArchive archive;
-        string[] rar, rarSubs, nfo;
-        string releaseName, showName, subsFolder, releaseStartDir, outputDir, tvDir;
-        Thread backgroundThread;
+        Logic l = new Logic();
+        Logic.ReleaseInfo ri;
+        string releaseStartDir, outputDir, tvDir;
+        //Thread backgroundThread;
         //ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
         Configuration config;
 
@@ -25,7 +25,7 @@ namespace UnRAR_Release
             //configFileMap.ExeConfigFilename = (Application.ExecutablePath.Replace(".EXE", ".exe") + ".config");
             if (!File.Exists(String.Concat(Application.ExecutablePath, ".config")))
             {
-                Program.CreateAppConfig();
+                l.CreateAppConfig();
             }
             this.Activated += new EventHandler(Form1_Activated);
         }
@@ -39,7 +39,7 @@ namespace UnRAR_Release
                 releaseStartDir = config.AppSettings.Settings["ReleaseStartDir"].Value;
                 outputDir = config.AppSettings.Settings["OutputDir"].Value;
                 tvDir = config.AppSettings.Settings["TVDir"].Value;
-                if (String.IsNullOrEmpty(releaseName))
+                if (ri == null)
                 {
                     tbOutput.Text = outputDir;
                     tbRelease.Text = releaseStartDir;
@@ -87,20 +87,16 @@ namespace UnRAR_Release
 
         public delegate void UpdateUI();
 
-        public void extractArchive(string outDir)
-        // public void extractArchive(string outputDir, string file)
-        // Before archive was public
+        public void extractArchive(RarArchive archive, string outputDir)
         {
             Invoke(new UpdateUI(() => setStatus("Extracting...", true)));
-            //using (var archive = RarArchive.Open(@file))
             using (archive)
             {
                 foreach (var entry in archive.Entries)
                 {
                     if (!entry.IsDirectory)
                     {
-                        //entry.WriteToDirectory(@outputDir, ExtractionOptions.ExtractFullPath | ExtractionOptions.Overwrite);
-                        entry.WriteToDirectory(outDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                        entry.WriteToDirectory(outputDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
                     }
                 }
                 Invoke(new UpdateUI(() => setStatus("Idle.", false)));
@@ -126,23 +122,9 @@ namespace UnRAR_Release
         }
         */
 
-        /*
-        private void unix2dos(string unixfile, string dosfile)
-        {
-            string[] lines = File.ReadAllLines(unixfile);
-            List<string> list_of_string = new List<string>();
-            foreach (string line in lines)
-            {
-                list_of_string.Add(line.Replace("\n", "\r\n"));
-            }
-            File.WriteAllLines(dosfile, list_of_string);
-        }
-        */
-
         private void btnReleaseBrowse_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbdRelease = new FolderBrowserDialog();
-            //Console.WriteLine(releaseStartDir);
             tsProgress.Value = 0;
             try
             {
@@ -151,57 +133,30 @@ namespace UnRAR_Release
 
                 if (fbdRelease.ShowDialog() == DialogResult.OK)
                 {
-                    // tsStatus.Text = "Folder " + fbd.SelectedPath + " chosen.";
                     tbRelease.Text = fbdRelease.SelectedPath;
-                    rar = Directory.GetFiles(fbdRelease.SelectedPath, "*.rar");
-                    nfo = Directory.GetFiles(fbdRelease.SelectedPath, "*.nfo");
-
-                    if (rar.Length > 0)
+                    ri = l.processRelease(fbdRelease.SelectedPath);
+                    if (ri.Type == "tv")
                     {
-                        subsFolder = fbdRelease.SelectedPath + @"\" + "Subs";
-                        if (Directory.Exists(subsFolder))
-                        {
-                            rarSubs = Directory.GetFiles(subsFolder, "*.rar");
-                        }
-
-                        releaseName = Path.GetFileName(Path.GetDirectoryName(rar[0]));
-
-                        Match match = Regex.Match(releaseName, "S..E..");
-                        if (match.Success)
-                        {
-                            showName = releaseName.Substring(0, (match.Index - 1));
-                            showName = showName.Replace(".", " ");
-                            // Exceptions
-                            switch (showName)
-                            {
-                                case "Marvels Agents of S H I E L D":
-                                    showName = "Marvels Agents of SHIELD";
-                                    break;
-                                case "Taboo UK":
-                                    showName = "Taboo (2017)";
-                                    break;
-                            }
-                            tbOutput.Text = tvDir + @"\" + showName;
-                        }
-                        else
-                        {
-                            tbOutput.Text = outputDir;
-                        }
-                        archive = RarArchive.Open(rar[0]);
-                        tbCompSize.Text = archive.TotalSize.ToString() + " Bytes = " + Program.FormatBytes(archive.TotalSize);
-                        tbUncompSize.Text = archive.TotalUncompressSize.ToString() + " Bytes = " + Program.FormatBytes(archive.TotalUncompressSize);
-                        tbRatio.Text = ((int)(0.5f + ((100f * archive.TotalSize) / archive.TotalUncompressSize))).ToString() + " %";
-                        tbVolumes.Text = archive.Volumes.Count.ToString();
-                        tbFiles.Text = archive.Entries.Count.ToString();
-                        tbSolid.Text = archive.IsSolid.ToString();
-                        tbSubs.Text = Directory.Exists(subsFolder).ToString();
-                        btnExtract.Enabled = true;
+                        tbOutput.Text = tvDir + @"\" + ri.ShowName;
                     }
+                    else
+                    {
+                        tbOutput.Text = outputDir;
+                    }
+
+                    tbCompSize.Text = ri.CompressedSize;
+                    tbUncompSize.Text = ri.UncompressedSize;
+                    tbRatio.Text = ri.CompressionRatio;
+                    tbVolumes.Text = ri.NumberOfArchiveParts.ToString();
+                    tbFiles.Text = ri.NumberOfFilesInArchive.ToString();
+                    tbSolid.Text = ri.SolidArchive.ToString();
+                    tbSubs.Text = ri.SubsPresent.ToString();
+                    btnExtract.Enabled = true;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show("Release Browse Error: " + ex.Message);
             }
             fbdRelease.Dispose();
             //this.ActiveControl = tbRelease;
@@ -223,50 +178,18 @@ namespace UnRAR_Release
                 if (fbdOutput.ShowDialog() == DialogResult.OK)
                 {
                     tbOutput.Text = fbdOutput.SelectedPath;
-                    // MessageBox.Show(fbdOutput.SelectedPath + @"\" + releaseName);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show("Output Browse Error: " + ex.Message);
             }
             fbdOutput.Dispose();
         }
 
         private void btnExtract_Click(object sender, EventArgs e)
         {
-            if (!String.IsNullOrEmpty(tbRelease.Text) && rar.Length > 0)
-            {
-                try
-                {
-                    // For TV episodes
-                    if (tbOutput.Text.Contains(tvDir))
-                    {
-                        Directory.CreateDirectory(tbOutput.Text);
-                        backgroundThread = new Thread(() => extractArchive(tbOutput.Text));
-                        backgroundThread.Start();
-                    }
-                    else
-                    {
-                        // For movies
-                        string outputReleaseDir = tbOutput.Text + @"\" + releaseName;
-                        Directory.CreateDirectory(outputReleaseDir);
-
-                        backgroundThread = new Thread(() => extractArchive(outputReleaseDir));
-                        backgroundThread.Start();
-
-                        if (rarSubs.Length > 0)
-                        {
-                            Program.extractSubs(rarSubs, outputReleaseDir);
-                        }
-                        Program.processFile(nfo[0], outputReleaseDir, false);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-            }
+            l.extractRelease(ri, tbOutput.Text, this);
         }
     }
 }
