@@ -127,7 +127,7 @@ namespace UnRAR_Release
                     {
                         if (!entry.IsDirectory)
                         {
-                            entry.WriteToDirectory(outputDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                            entry.WriteToDirectory(@outputDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true, PreserveFileTime = true });
                         }
                     }
                 }
@@ -155,7 +155,7 @@ namespace UnRAR_Release
                 {
                     if (!entry.IsDirectory)
                     {
-                        entry.WriteToDirectory(@outputDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                        entry.WriteToDirectory(@outputDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true, PreserveFileTime = true });
                     }
                 }
             }
