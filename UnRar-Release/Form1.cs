@@ -1,7 +1,4 @@
-﻿using SharpCompress.Archives;
-using SharpCompress.Archives.Rar;
-using SharpCompress.Readers;
-using System;
+﻿using System;
 using System.Configuration;
 using System.IO;
 using System.Windows.Forms;
@@ -30,11 +27,12 @@ namespace UnRAR_Release
 
         private void Form1_Shown(object sender, EventArgs e)
         {
-            System.Threading.Thread.Sleep(1000);
+            //System.Threading.Thread.Sleep(1000);
             if (args.Length > 1)
             {
                 ri = l.processRelease(args[1]);
                 tbRelease.Text = args[1];
+                setArchiveDetails();
                 if (ri.Type == "tv")
                 {
                     tbOutput.Text = tvDir + @"\" + ri.ShowName;
@@ -46,7 +44,6 @@ namespace UnRAR_Release
                     l.extractRelease(ri, outputDir, this, true);
                 }
             }
-
         }
 
         void Form1_Activated(object sender, EventArgs e)
@@ -92,6 +89,18 @@ namespace UnRAR_Release
             Application.DoEvents();
         }
 
+        public void setArchiveDetails()
+        {
+            tbCompSize.Text = ri.CompressedSize;
+            tbUncompSize.Text = ri.UncompressedSize;
+            tbRatio.Text = ri.CompressionRatio;
+            tbVolumes.Text = ri.NumberOfArchiveParts.ToString();
+            tbFiles.Text = ri.NumberOfFilesInArchive.ToString();
+            tbSolid.Text = ri.SolidArchive.ToString();
+            tbSubs.Text = ri.SubsPresent.ToString();
+            btnExtract.Enabled = true;
+        }
+
         private void configToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ConfigForm cForm = new ConfigForm();
@@ -102,31 +111,6 @@ namespace UnRAR_Release
         {
             AboutBox1 aboutBox = new AboutBox1();
             aboutBox.ShowDialog();
-        }
-
-        public delegate void UpdateUI();
-
-        public void extractArchive(RarArchive archive, string outputDir, bool terminateApplication)
-        {
-            Invoke(new UpdateUI(() => setStatus("Extracting...", true)));
-            using (archive)
-            {
-                foreach (var entry in archive.Entries)
-                {
-                    if (!entry.IsDirectory)
-                    {
-                        entry.WriteToDirectory(outputDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
-                    }
-                }
-                if (terminateApplication)
-                {
-                    this.Close();
-                }
-                else
-                {
-                    Invoke(new UpdateUI(() => setStatus("Idle.", false)));
-                }
-            }
         }
 
         /*
@@ -171,17 +155,9 @@ namespace UnRAR_Release
                         {
                             tbOutput.Text = outputDir;
                         }
-
-                        tbCompSize.Text = ri.CompressedSize;
-                        tbUncompSize.Text = ri.UncompressedSize;
-                        tbRatio.Text = ri.CompressionRatio;
-                        tbVolumes.Text = ri.NumberOfArchiveParts.ToString();
-                        tbFiles.Text = ri.NumberOfFilesInArchive.ToString();
-                        tbSolid.Text = ri.SolidArchive.ToString();
-                        tbSubs.Text = ri.SubsPresent.ToString();
-                        btnExtract.Enabled = true;
+                        setArchiveDetails();
                     }
-                }
+                }       
             }
             catch (Exception ex)
             {

@@ -2,10 +2,10 @@
 using SharpCompress.Archives.Rar;
 using SharpCompress.Readers;
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace UnRAR_Release
@@ -92,8 +92,7 @@ namespace UnRAR_Release
                     if (ri.Type == "tv")
                     {
                         Directory.CreateDirectory(outputDir);
-                        Thread backgroundThread = new Thread(() => sender.extractArchive(ri.Archive, outputDir, terminateApplication));
-                        backgroundThread.Start();
+                        extractArchive(ri.Archive, outputDir, sender, terminateApplication);
                     }
                     else
                     {
@@ -102,8 +101,7 @@ namespace UnRAR_Release
                         string outputReleaseDir = outputDir + @"\" + ri.Name;
                         Directory.CreateDirectory(outputReleaseDir);
                         processFile(nfo[0], outputReleaseDir, false);
-                        Thread backgroundThread = new Thread(() => sender.extractArchive(ri.Archive, outputReleaseDir, terminateApplication));
-                        backgroundThread.Start();
+                        extractArchive(ri.Archive, outputReleaseDir, sender, terminateApplication);
                         if (ri.SubsPresent)
                         {
                             extractSubs(ri, outputReleaseDir);
@@ -117,23 +115,37 @@ namespace UnRAR_Release
             }
         }
 
-        /*
-        public void extractArchive(RarArchive archive, string outputDir, Form1 sender)
+        public void extractArchive(RarArchive archive, string outputDir, Form1 sender, bool terminateApplication)
         {
+            var bw = new BackgroundWorker();
             sender.setStatus("Extracting...", true);
-            using (archive)
+            bw.DoWork += (senderObject, args) =>
             {
-                foreach (var entry in archive.Entries)
+                using (archive)
                 {
-                    if (!entry.IsDirectory)
+                    foreach (var entry in archive.Entries)
                     {
-                        entry.WriteToDirectory(outputDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                        if (!entry.IsDirectory)
+                        {
+                            entry.WriteToDirectory(outputDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                        }
                     }
                 }
+            };
+            bw.RunWorkerCompleted += (senderObject, args) =>
+            {
+                if (args.Error != null)
+                {
+                    MessageBox.Show(args.Error.ToString());
+                }
                 sender.setStatus("Idle.", false);
-            }
+                if (terminateApplication)
+                {
+                    sender.Close();
+                }
+            };
+            bw.RunWorkerAsync();
         }
-        */
 
         public void extractArchiveSingleThread(RarArchive archive, string outputDir)
         {
