@@ -115,7 +115,7 @@ namespace UnRAR_Release
             }
         }
 
-        public void extractArchive(RarArchive archive, string outputDir, Form1 sender, bool terminateApplication)
+        private void extractArchive(RarArchive archive, string outputDir, Form1 sender, bool terminateApplication)
         {
             var bw = new BackgroundWorker();
             sender.setStatus("Extracting...", true);
@@ -147,7 +147,7 @@ namespace UnRAR_Release
             bw.RunWorkerAsync();
         }
 
-        public void extractArchiveSingleThread(RarArchive archive, string outputDir)
+        private void extractArchiveSingleThread(RarArchive archive, string outputDir)
         {
             using (archive)
             {
@@ -161,7 +161,7 @@ namespace UnRAR_Release
             }
         }
 
-        public void extractSubs(ReleaseInfo ri, string outputDir)
+        private void extractSubs(ReleaseInfo ri, string outputDir)
         {
             try
             {
@@ -184,7 +184,7 @@ namespace UnRAR_Release
             }
         }
 
-        public void processFile(string inputFileName, string outputDir, bool deleteInputFile)
+        private void processFile(string inputFileName, string outputDir, bool deleteInputFile)
         {
             try
             {
@@ -203,7 +203,7 @@ namespace UnRAR_Release
             }
         }
 
-        public string FormatBytes(long bytes)
+        private string FormatBytes(long bytes)
         {
             string[] Suffix = { "B", "KB", "MB", "GB", "TB" };
             int i;

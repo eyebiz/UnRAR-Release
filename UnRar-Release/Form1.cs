@@ -21,7 +21,7 @@ namespace UnRAR_Release
             {
                 l.CreateAppConfig();
             }
-            Shown += Form1_Shown;
+            this.Shown += Form1_Shown;
             this.Activated += new EventHandler(Form1_Activated);
         }
 
@@ -46,7 +46,7 @@ namespace UnRAR_Release
             }
         }
 
-        void Form1_Activated(object sender, EventArgs e)
+        private void Form1_Activated(object sender, EventArgs e)
         {
             if (File.Exists(String.Concat(Application.ExecutablePath, ".config")))
             {
@@ -89,7 +89,7 @@ namespace UnRAR_Release
             Application.DoEvents();
         }
 
-        public void setArchiveDetails()
+        private void setArchiveDetails()
         {
             tbCompSize.Text = ri.CompressedSize;
             tbUncompSize.Text = ri.UncompressedSize;
