@@ -118,6 +118,24 @@ namespace UnRAR_Release
         private void extractArchive(RarArchive archive, string outputDir, Form1 sender, bool terminateApplication)
         {
             var bw = new BackgroundWorker();
+            bw.WorkerReportsProgress = true;
+            string fileName = string.Empty;
+            long totalSize = archive.TotalSize;
+            long completed = 0;
+
+            System.Timers.Timer aTimer = new System.Timers.Timer();
+            aTimer.Elapsed += (senderObjectTimer, argsTimer) => { bw.ReportProgress(GetPercentage(fileName, completed, totalSize)); };
+            aTimer.Interval = 1000;
+            aTimer.Enabled = true;
+            /*
+            FileSystemWatcher watcher = new FileSystemWatcher(@outputDir);
+            watcher.Changed += new FileSystemEventHandler(OnChanged);
+            watcher.Created += new FileSystemEventHandler(OnChanged);
+            watcher.Filter = "*.mkv";
+            watcher.IncludeSubdirectories = true;
+            watcher.NotifyFilter = NotifyFilters.Size | NotifyFilters.LastAccess | NotifyFilters.LastWrite;
+            watcher.EnableRaisingEvents = true;
+            */
             sender.setStatus("Extracting...", true);
             bw.DoWork += (senderObject, args) =>
             {
@@ -127,17 +145,22 @@ namespace UnRAR_Release
                     {
                         if (!entry.IsDirectory)
                         {
+                            fileName = @outputDir + @"\" + entry.Key;
                             entry.WriteToDirectory(@outputDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true, PreserveFileTime = true });
+                            completed += GetFileSize(fileName);
                         }
                     }
                 }
             };
+            bw.ProgressChanged += (senderObject, args) => { sender.setProgress(args.ProgressPercentage); };
             bw.RunWorkerCompleted += (senderObject, args) =>
             {
                 if (args.Error != null)
                 {
                     MessageBox.Show(args.Error.ToString());
                 }
+                aTimer.Dispose();
+                //watcher.Dispose();
                 sender.setStatus("Idle.", false);
                 if (terminateApplication)
                 {
@@ -145,6 +168,19 @@ namespace UnRAR_Release
                 }
             };
             bw.RunWorkerAsync();
+        }
+
+        private long GetFileSize(string fileName)
+        {
+            FileInfo fi = new FileInfo(fileName);
+            return fi.Length;
+        }
+
+        private int GetPercentage(string fileName, long completed, long totalSize)
+        {
+            FileInfo fi = new FileInfo(fileName);
+            int percentage = Convert.ToInt32((fi.Length + completed) * 100 / totalSize);
+            return percentage;
         }
 
         private void extractArchiveSingleThread(RarArchive archive, string outputDir)

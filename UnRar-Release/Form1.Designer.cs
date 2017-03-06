@@ -129,7 +129,7 @@
             // tsProgress
             // 
             this.tsProgress.Name = "tsProgress";
-            this.tsProgress.Size = new System.Drawing.Size(200, 16);
+            this.tsProgress.Size = new System.Drawing.Size(300, 16);
             // 
             // tsStatus
             // 

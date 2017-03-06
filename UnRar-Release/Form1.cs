@@ -76,7 +76,7 @@ namespace UnRAR_Release
                 btnExit.Enabled = false;
                 btnOutputBrowse.Enabled = false;
                 btnReleaseBrowse.Enabled = false;
-                tsProgress.Style = ProgressBarStyle.Marquee;
+                //tsProgress.Style = ProgressBarStyle.Marquee;
             }
             else
             {
@@ -84,9 +84,14 @@ namespace UnRAR_Release
                 btnExit.Enabled = true;
                 btnOutputBrowse.Enabled = true;
                 btnReleaseBrowse.Enabled = true;
-                tsProgress.Style = ProgressBarStyle.Blocks;
+                //tsProgress.Style = ProgressBarStyle.Blocks;
             }
             Application.DoEvents();
+        }
+
+        public void setProgress(int percentage)
+        {
+            tsProgress.Value = percentage;
         }
 
         private void setArchiveDetails()
