@@ -147,7 +147,7 @@ namespace UnRAR_Release
                         {
                             fileName = @outputDir + @"\" + entry.Key;
                             entry.WriteToDirectory(@outputDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true, PreserveFileTime = true });
-                            completed += GetFileSize(fileName);
+                            completed += entry.Size;
                         }
                     }
                 }
@@ -170,11 +170,13 @@ namespace UnRAR_Release
             bw.RunWorkerAsync();
         }
 
+        /*
         private long GetFileSize(string fileName)
         {
             FileInfo fi = new FileInfo(fileName);
             return fi.Length;
         }
+        */
 
         private int GetPercentage(string fileName, long completed, long totalSize)
         {
