@@ -20,12 +20,12 @@ namespace UnRAR_Release
             public string ShowName { get; set; }
             public string Path { get; set; }
             public string Type { get; set; }
-            public string CompressedSize { get; set; }
-            public string UncompressedSize { get; set; }
-            public string CompressionRatio { get; set; }
-            public int NumberOfArchiveParts { get; set; }
-            public int NumberOfFilesInArchive { get; set; }
-            public bool SolidArchive { get; set; }
+            //public string CompressedSize { get; set; }
+            //public string UncompressedSize { get; set; }
+            //public string CompressionRatio { get; set; }
+            //public int NumberOfArchiveParts { get; set; }
+            //public int NumberOfFilesInArchive { get; set; }
+            //public bool SolidArchive { get; set; }
             public bool SubsPresent { get; set; }
         }
 
@@ -72,19 +72,19 @@ namespace UnRAR_Release
                     ri.Type = "movie";
                 }
                 ri.Archive = RarArchive.Open(@rar[0]);
-                ri.CompressedSize = ri.Archive.TotalSize.ToString() + " Bytes = " + FormatBytes(ri.Archive.TotalSize);
-                ri.UncompressedSize = ri.Archive.TotalUncompressSize.ToString() + " Bytes = " + FormatBytes(ri.Archive.TotalUncompressSize);
-                ri.CompressionRatio = ((int)(0.5f + ((100f * ri.Archive.TotalSize) / ri.Archive.TotalUncompressSize))).ToString() + " %";
-                ri.NumberOfArchiveParts = ri.Archive.Volumes.Count;
-                ri.NumberOfFilesInArchive = ri.Archive.Entries.Count;
-                ri.SolidArchive = ri.Archive.IsSolid;
+                //ri.CompressedSize = ri.Archive.TotalSize.ToString() + " Bytes = " + FormatBytes(ri.Archive.TotalSize);
+                //ri.UncompressedSize = ri.Archive.TotalUncompressSize.ToString() + " Bytes = " + FormatBytes(ri.Archive.TotalUncompressSize);
+                //ri.CompressionRatio = ((int)(0.5f + ((100f * ri.Archive.TotalSize) / ri.Archive.TotalUncompressSize))).ToString() + " %";
+                //ri.NumberOfArchiveParts = ri.Archive.Volumes.Count;
+                //ri.NumberOfFilesInArchive = ri.Archive.Entries.Count;
+                //ri.SolidArchive = ri.Archive.IsSolid;
             }
             return ri;
         }
 
         public void extractRelease(ReleaseInfo ri, string outputDir, Form1 sender, bool terminateApplication)
         {
-            if (!String.IsNullOrEmpty(ri.Name) && ri.NumberOfFilesInArchive > 0)
+            if (!String.IsNullOrEmpty(ri.Name) && ri.Archive.Entries.Count > 0)
             {
                 try
                 {
@@ -241,7 +241,7 @@ namespace UnRAR_Release
             }
         }
 
-        private string FormatBytes(long bytes)
+        public string FormatBytes(long bytes)
         {
             string[] Suffix = { "B", "KB", "MB", "GB", "TB" };
             int i;

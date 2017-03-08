@@ -96,12 +96,12 @@ namespace UnRAR_Release
 
         private void setArchiveDetails()
         {
-            tbCompSize.Text = ri.CompressedSize;
-            tbUncompSize.Text = ri.UncompressedSize;
-            tbRatio.Text = ri.CompressionRatio;
-            tbVolumes.Text = ri.NumberOfArchiveParts.ToString();
-            tbFiles.Text = ri.NumberOfFilesInArchive.ToString();
-            tbSolid.Text = ri.SolidArchive.ToString();
+            tbCompSize.Text = ri.Archive.TotalSize.ToString() + " Bytes = " + l.FormatBytes(ri.Archive.TotalSize);
+            tbUncompSize.Text = ri.Archive.TotalUncompressSize.ToString() + " Bytes = " + l.FormatBytes(ri.Archive.TotalUncompressSize);
+            tbRatio.Text = ((int)(0.5f + ((100f * ri.Archive.TotalSize) / ri.Archive.TotalUncompressSize))).ToString() + " %";
+            tbVolumes.Text = ri.Archive.Volumes.Count.ToString();
+            tbFiles.Text = ri.Archive.Entries.Count.ToString();
+            tbSolid.Text = ri.Archive.IsSolid.ToString();
             tbSubs.Text = ri.SubsPresent.ToString();
             btnExtract.Enabled = true;
         }
