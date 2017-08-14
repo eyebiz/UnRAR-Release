@@ -124,7 +124,7 @@ namespace UnRAR_Release
             long completed = 0;
 
             System.Timers.Timer aTimer = new System.Timers.Timer();
-            aTimer.Elapsed += (senderObjectTimer, argsTimer) => { bw.ReportProgress(GetPercentage(fileName, completed, totalSize)); };
+            aTimer.Elapsed += (senderObject, args) => { bw.ReportProgress(GetPercentage(fileName, completed, totalSize)); };
             aTimer.Interval = 1000;
             aTimer.Enabled = true;
             /*
