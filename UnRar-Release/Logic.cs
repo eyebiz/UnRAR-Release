@@ -42,8 +42,12 @@ namespace UnRAR_Release
                 if (Directory.Exists(subsFolder))
                 {
                     rarSubs = Directory.GetFiles(subsFolder, "*.rar");
-                    ri.SubsArchive = RarArchive.Open(@rarSubs[0]);
-                    ri.SubsPresent = true;
+                    if (rarSubs.Length > 0)
+                    {
+                        ri.SubsArchive = RarArchive.Open(@rarSubs[0]);
+                        ri.SubsPresent = true;
+                    }
+                    else ri.SubsPresent = false;
                 }
 
                 ri.Name = Path.GetFileName(Path.GetDirectoryName(rar[0]));
@@ -104,7 +108,7 @@ namespace UnRAR_Release
                         extractArchive(ri.Archive, outputReleaseDir, sender, terminateApplication);
                         if (ri.SubsPresent)
                         {
-                            extractSubs(ri, outputReleaseDir);
+                            extractSubs(ri.SubsArchive, outputReleaseDir);
                         }
                     }
                 }
@@ -199,18 +203,19 @@ namespace UnRAR_Release
             }
         }
 
-        private void extractSubs(ReleaseInfo ri, string outputDir)
+        private void extractSubs(RarArchive archive, string outputDir)
         {
             try
             {
                 string outputSubsDir = outputDir + @"\" + "Subs";
                 Directory.CreateDirectory(outputSubsDir);
-                extractArchiveSingleThread(ri.SubsArchive, outputSubsDir);
+                extractArchiveSingleThread(archive, outputSubsDir);
 
+                // Extract rar file within rar file is present
                 string[] rarSubs2 = Directory.GetFiles(outputSubsDir, "*.rar");
                 if (rarSubs2.Length > 0)
                 {
-                    RarArchive archive = RarArchive.Open(@rarSubs2[0]);
+                    archive = RarArchive.Open(@rarSubs2[0]);
                     extractArchiveSingleThread(archive, outputSubsDir);
                     File.SetAttributes(rarSubs2[0], FileAttributes.Normal);
                     File.Delete(rarSubs2[0]);
