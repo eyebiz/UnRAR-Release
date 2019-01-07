@@ -9,6 +9,6 @@ C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRAR_Release.Pr
 C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRAR-Release.csproj.GenerateResource.Cache
 C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRAR-Release.exe
 C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRAR-Release.pdb
-C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRAR-Release.csprojResolveAssemblyReference.cache
 C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRAR-Release.csproj.CoreCompileInputs.cache
 C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRAR-Release.csproj.CopyComplete
+C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRAR-Release.csprojAssemblyReference.cache
