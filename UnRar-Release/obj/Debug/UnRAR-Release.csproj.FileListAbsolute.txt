@@ -12,3 +12,13 @@ C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRAR-Release.pd
 C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRAR-Release.csproj.CoreCompileInputs.cache
 C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRAR-Release.csproj.CopyComplete
 C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\obj\Debug\UnRAR-Release.csprojAssemblyReference.cache
+C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\bin\Debug\System.Buffers.dll
+C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\bin\Debug\System.Memory.dll
+C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\bin\Debug\System.Text.Encoding.CodePages.dll
+C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\bin\Debug\System.Buffers.xml
+C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\bin\Debug\System.Memory.xml
+C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\Jim\Source\Repos\UnRAR-Release\UnRar-Release\bin\Debug\System.Text.Encoding.CodePages.xml
